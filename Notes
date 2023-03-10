@@ -1,0 +1,2 @@
+Initialised node project by typing npm init -y (I had issues here it displayed wierd characters).This will automatically generate the package.json where all my dependencies will be specified
+Installed nodemon to automatically refresh changes
