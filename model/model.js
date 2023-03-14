@@ -1,4 +1,6 @@
 let todos = require('../data/Todos')
+const emptyfile = require('../data/Empty')
+const initialFile = require('../data/Refresh')
 const { v4: uuidv4 } = require('uuid')
 const { writeDataToFile } = require('../utils')
 
@@ -38,10 +40,24 @@ function remove(id) {
     resolve()
   })
 }
+function remove_all() {
+  return new Promise((resolve, reject) => {
+    writeDataToFile('./data/todos.json', emptyfile)
+    resolve()
+  })
+}
+function refresh() {
+  return new Promise((resolve, reject) => {
+    writeDataToFile('./data/todos.json', initialFile)
+    resolve()
+  })
+}
 module.exports = {
   findtodobyid,
   findalltodos,
   create,
   update,
   remove,
+  remove_all,
+  refresh,
 }

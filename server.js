@@ -5,10 +5,13 @@ const todos = require('./data/Todos')
 const {
   gettodos,
   getatodo,
+  getatodo_multi,
   createatodo,
   updateatodo,
   deleteatodo,
   deleteatodo_multi,
+  deleteatodo_all,
+  refreshtodo,
 } = require('./controller/controller')
 
 const server = http
@@ -27,7 +30,16 @@ const server = http
       console.log(typeof id)
       // Splice did not return a number or a string, but rather an array of one variable of type Object
     }
-    // Display A Group of Todos
+    // Display multiple  Todos
+    else if (req.url.match(/^\/api\/todo\/([0-9]+)/g) && req.method === 'GET') {
+      let url = req.url.split('/')
+      console.log(url)
+      console.log('url legnth ' + url.length)
+      const list_ids = url.splice(3, url.length - 3)
+      console.log(list_ids)
+      console.log('list of id legnth ' + list_ids.length)
+      getatodo_multi(req, res, list_ids)
+    }
     // Create a Single Todo
     else if (req.url.match(/^\/api\/todos$/) && req.method === 'POST') {
       createatodo(req, res)
@@ -58,6 +70,15 @@ const server = http
       console.log('list of id legnth ' + list_ids.length)
       deleteatodo_multi(req, res, list_ids)
     }
+    // Delete ALL Todos
+    else if (req.url.match(/^\/api\/todos\/RA/) && req.method === 'DELETE') {
+      deleteatodo_all(req, res)
+    }
+    // Refresh Initial Data
+    else if (req.url.match(/^\/api\/todos\/RE/) && req.method === 'GET') {
+      refreshtodo(req, res)
+    }
+
     // If nothing Works
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' })
