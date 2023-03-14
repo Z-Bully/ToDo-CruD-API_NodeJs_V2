@@ -8,6 +8,7 @@ const {
   createatodo,
   updateatodo,
   deleteatodo,
+  deleteatodo_multi,
 } = require('./controller/controller')
 
 const server = http
@@ -38,11 +39,24 @@ const server = http
       updateatodo(req, res, String(id))
     } // Delete a Single Todo
     else if (
-      req.url.match(/\/api\/todo\/([0-9]+)/) &&
+      req.url.match(/^\/api\/todo\/([0-9]+)$/) &&
       req.method === 'DELETE'
     ) {
       const id = req.url.split('/')[3]
       deleteatodo(req, res, id)
+    }
+    // Delete Multiple Todos
+    else if (
+      req.url.match(/^\/api\/todo\/([0-9]+)/g) &&
+      req.method === 'DELETE'
+    ) {
+      let url = req.url.split('/')
+      console.log(url)
+      console.log('url legnth ' + url.length)
+      const list_ids = url.splice(3, url.length - 3)
+      console.log(list_ids)
+      console.log('list of id legnth ' + list_ids.length)
+      deleteatodo_multi(req, res, list_ids)
     }
     // If nothing Works
     else {
